@@ -25,6 +25,12 @@
 /processorParam:TextureFormat=Color
 /build:Darrian's bomb.png
 
+#begin explosion.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:explosion.wav
+
 #begin Kian's Head.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor

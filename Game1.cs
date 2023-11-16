@@ -1,8 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Net.Http;
+using System.Runtime.InteropServices;
 
 namespace Time_and_Sound
 {
@@ -10,8 +12,11 @@ namespace Time_and_Sound
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
-        Texture2D bomb;
         SpriteFont _font;
+        Texture2D bomb;
+        float seconds, startTime;
+        MouseState mouseState;
+        SoundEffect christainsLittleExplosion;
 
         public Game1()
         {
@@ -34,6 +39,7 @@ namespace Time_and_Sound
             // TODO: use this.Content to load your game content here
             _font = Content.Load<SpriteFont>("Kian's Head");
             bomb = Content.Load<Texture2D>("Darrian's bomb");
+            christainsLittleExplosion = Content.Load<SoundEffect>("explosion");
         }
 
         protected override void Update(GameTime gameTime)
@@ -42,7 +48,18 @@ namespace Time_and_Sound
                 Exit();
 
             // TODO: Add your update logic here
+            seconds = (float)gameTime.TotalGameTime.TotalSeconds - startTime;
+            if (mouseState.LeftButton == ButtonState.Pressed)
+                startTime = (float)gameTime.TotalGameTime.TotalSeconds;
+            if (seconds > 10) 
+                startTime = (float)gameTime.TotalGameTime.TotalSeconds;
+            if (seconds >= 10)
+            {
+                christainsLittleExplosion       .Play();
+                startTime = (float)gameTime.TotalGameTime.TotalSeconds;
+            }
 
+            mouseState = Mouse.GetState();
             base.Update(gameTime);
         }
 
@@ -52,8 +69,8 @@ namespace Time_and_Sound
 
             // TODO: Add your drawing code here
             _spriteBatch.Begin();
-            _spriteBatch.DrawString(_font,"Kian's HEAD", new Vector2 (270, 200), Color.Black);
-            _spriteBatch.Draw(bomb[]);
+            _spriteBatch.Draw(bomb,new Rectangle(130 ,110, 530, 300),Color.White);
+            _spriteBatch.DrawString(_font, (10-seconds).ToString("0.0"), new Vector2 (280, 200), Color.Black);
             _spriteBatch.End();
 
             base.Draw(gameTime);
